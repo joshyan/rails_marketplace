@@ -1,0 +1,67 @@
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Add New Product</h3>
+      </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="height:600px;">
+          <div class="x_title">
+
+            <%= form_for(:product, url: seller_create_product_path, html: { multipart: true }) do |f| %>
+              <%= render 'shared/product_error_messages' %>
+              
+              <%= f.label :title %>
+              <%= f.text_field :title, class: 'form-control' %>
+
+              <%= f.label :description %>
+              <%= f.text_area :description, class: 'form-control wysihtml5' %>
+
+              <%= f.label :price %>
+              <%= f.text_field :price, class: 'form-control' %>
+
+              <%= f.label :quantity %>
+              <%= f.text_field :quantity, class: 'form-control' %>
+
+              <%= f.label :images %>
+              <%= f.file_field :images, multiple: true, accept: "image/jpeg, image/jpg, image/gif, image/png" %>
+              
+              <%= f.label :files %>
+              <%= f.file_field :files, multiple: true %>
+              
+              <%= f.label :categories %>
+                <% Category.walk_tree do |cat, level| level%>
+                  <br>
+                  <input type="checkbox" name="product[category_ids][]" value="<%=cat.id%>" <% if @product.categories.include? cat %>checked<% end %>><%="#{'-' * level} #{cat.name}"%>
+                <% end %>
+
+              <br><br>
+              <%= f.submit "Submit", class: "btn btn-primary" %>
+            <% end %>
+
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $('.wysihtml5').each(function(i, elem) {
+      $(elem).wysihtml5();
+    });
+
+  })
+</script>

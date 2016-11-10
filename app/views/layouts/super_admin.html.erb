@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= content_for?(:title) ? yield(:title) : "GentelellaOnRails" %> </title>
+
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<% if @current_admin %>
+<body class="nav-md">
+  <div class="container body">
+  <% flash.each do |key, value| %>
+      <div align="center" id="flash" class="alert alert-<%= key %>"><%= value %></div>
+  <% end %>
+
+  <%= render "partials/admin_sidenav" %>
+  <%= render "partials/admin_topnav" %>
+
+  <%= yield %>
+
+  <%= render "partials/footer" %>
+  <%= javascript_include_tag 'footermanifest', 'data-turbolinks-track' => true %>
+
+</body>
+<% else %>
+<body style="background:#F7F7F7;">
+
+<div class="container body">
+
+<%= render template: "layouts/_menu" %>
+
+  <% flash.each do |key, value| %>
+      <div align="center" id="flash" class="alert alert-<%= key %>">
+        <a href="#" data-dismiss="alert" class="close">×</a>
+        <ul style="text-align: center">
+          <l>
+          <b> <%= value %>  </b>
+          </l>
+        </ul>
+      </div>
+  <% end %>
+  
+  <%= yield %>
+
+</body>
+<% end %>
+</html>

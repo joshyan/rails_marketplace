@@ -1,0 +1,63 @@
+<!-- page content -->
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Add New Category</h3>
+      </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="row">
+
+      <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel" style="height:600px;">
+          <div class="x_title">
+
+		    <%= form_for(:category, url: admin_create_category_path) do |f| %>
+
+		    	<div class="field form-group">
+		      		<%= f.label :name %>
+		      		<%= f.text_field :name, class: 'form-control' %>
+		      	</div>
+
+		      	<div class="field form-group">
+		      		<%= f.label :description %>
+		      		<%= f.text_area :description, class: 'form-control' %>
+		      	</div>
+
+		      	<div class="field form-group">
+			      <%= f.label :parent_id %>
+            <select name="category[parent_id]">
+              <option value="">Root</option>
+              <% Category.walk_tree do |cat, level| level += 1%>
+                <option value="<%=cat.id%>"><%="#{'-' * level} #{cat.name}"%></option>
+              <% end %>
+            </select>
+			      
+            </div>
+
+		      <br><br>
+		      <%= f.submit "Submit", class: "btn btn-primary" %>
+		    <% end %>
+
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /page content -->
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    $('.wysihtml5').each(function(i, elem) {
+      $(elem).wysihtml5();
+    });
+
+  })
+</script>
