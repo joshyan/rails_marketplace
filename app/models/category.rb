@@ -12,4 +12,8 @@ class Category < ActiveRecord::Base
 	def should_generate_new_friendly_id?
 	  name_changed?
 	end
+
+	def self.root_categories
+		where('parent_id' == nil).order('id asc')
+	end
 end

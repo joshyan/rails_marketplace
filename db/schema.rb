@@ -11,16 +11,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161110024118) do
+ActiveRecord::Schema.define(version: 20161115032905) do
 
   create_table "admins", force: :cascade do |t|
     t.string   "name"
     t.string   "email"
     t.string   "password"
     t.string   "password_digest"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+    t.string   "stripe_publishable_key"
+    t.string   "stripe_secret_key"
   end
+
+  create_table "cart_products", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "cart_id"
+    t.integer  "quantity"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "cart_products", ["cart_id"], name: "index_cart_products_on_cart_id"
+  add_index "cart_products", ["product_id"], name: "index_cart_products_on_product_id"
+
+  create_table "carts", force: :cascade do |t|
+    t.integer  "customer_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "carts", ["customer_id"], name: "index_carts_on_customer_id"
 
   create_table "categories", force: :cascade do |t|
     t.string  "name"
@@ -93,13 +114,15 @@ ActiveRecord::Schema.define(version: 20161110024118) do
     t.string   "title"
     t.text     "description"
     t.text     "images"
-    t.decimal  "price",       precision: 8, scale: 2
+    t.decimal  "price",          precision: 8, scale: 2
     t.integer  "quantity"
     t.text     "files"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
     t.integer  "seller_id"
     t.string   "slug"
+    t.integer  "price_cents",                            default: 0,     null: false
+    t.string   "price_currency",                         default: "USD", null: false
   end
 
   add_index "products", ["price"], name: "index_products_on_price"

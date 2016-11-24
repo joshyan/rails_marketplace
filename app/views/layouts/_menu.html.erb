@@ -4,8 +4,12 @@
       <a class="navbar-brand" href="/">Marketplace</a>
     </div>
     <ul class="nav navbar-nav">
-    	<li><%= link_to "eBooks", "/catalog/ebooks" %></li>
+      <% Category.root_categories.each do |cat| %>
+      	<li><%= link_to cat.name, category_products_path(cat) %></li>
+      <% end %>
+
       <li><%= link_to "Seller Central", seller_login_path %></li>
+      <li><%= link_to "Cart (#{session[:cart_id].nil? ? 0 : Cart.find(session[:cart_id]).cart_quantity})", cart_path %></li>
     </ul>
   </div>
 </nav>

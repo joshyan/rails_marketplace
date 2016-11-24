@@ -44,6 +44,8 @@ gem 'bootstrap-wysihtml5-rails'
 gem "mini_magick"
 gem 'acts_as_tree'
 gem 'friendly_id', '~> 5.1.0'
+gem 'money-rails'
+gem 'stripe'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'index#index'
+  root 'catalog#index'
 
   get 'sellercentral' => 'seller#login_form', as: :seller_login
   post 'sellercentral' => 'seller#login'
@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   get 'sellercentral/delete_product' => 'seller#delete_product', as: :seller_delete_product
   get 'sellercentral/add_bulk_products' => 'seller#add_bulk_products', as: :seller_add_bulk_products
   get 'sellercentral/orders' => 'seller#orders', as: :seller_orders
+  get 'sellercentral/settings_form' => 'seller#settings_form', as: :seller_settings_form
+  post 'sellercentral/settings' => 'seller#settings', as: :seller_settings
 
   get 'superadmin' => 'admin#login_form', as: :admin_login
   post 'superadmin' => 'admin#login'
@@ -35,10 +37,19 @@ Rails.application.routes.draw do
   post 'superadmin/update_category' => 'admin#update_category', as: :admin_update_category
   get 'superadmin/products' => 'admin#products', as: :admin_products
   get 'superadmin/category/:id/products' => 'admin#category_products', as: :admin_category_products
+  get 'superadmin/settings_form' => 'admin#settings_form', as: :admin_settings_form
+  post 'superadmin/settings' => 'admin#settings', as: :admin_settings
 
 
   get 'catalog/:name' => 'catalog#category_products', as: :category_products
   get 'product/:title' => 'catalog#product_detail', as: :product_detail
+  post 'cart/add' => 'catalog#add_to_cart', as: :add_to_cart
+  get 'cart' => 'catalog#cart', as: :cart
+  post 'cart/update' => 'catalog#cart_update', as: :cart_update
+  get 'cart/delete/:product_id' => 'catalog#cart_delete', as: :cart_delete
+  get 'checkout' => 'catalog#checkout', as: :checkout
+  post 'charge' => 'catalog#charge', as: :charge
+  post 'checkout/success' => 'catalog#checkout_success', as: :checkout_success
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

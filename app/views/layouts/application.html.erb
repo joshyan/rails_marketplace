@@ -2,35 +2,20 @@
 <html>
 <head>
   <title>Marketplace</title>
-  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'frontend', 'data-turbolinks-track' => true %>
 
-  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= stylesheet_link_tag    'frontend', media: 'all', 'data-turbolinks-track' => true %>
 
-  <style>
-    /*Devise flash*/
-    .alert-error {
-      background-color: #f2dede;
-      border-color: #eed3d7;
-      color: #b94a48;
-      text-align: center;
-    }
-    .alert-alert {
-      background-color: #f2dede;
-      border-color: #eed3d7;
-      color: #b94a48;
-      text-align: center;
-    }
-    .alert-notice {
-      background-color: #dff0d8;
-      border-color: #d6e9c6;
-      color: #468847;
-      text-align: left;
-    }
-  </style>
   <%= csrf_meta_tags %>
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <% if current_page?(:controller => 'catalog', :action => 'checkout') %>
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+  <script type="text/javascript">
+    Stripe.setPublishableKey('<%=Admin.stripe_publishable_key%>');
+  </script>
+  <% end %>
 </head>
 
 <body style="background:#F7F7F7;">

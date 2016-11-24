@@ -3,9 +3,13 @@
 <head>
   <title><%= content_for?(:title) ? yield(:title) : "GentelellaOnRails" %> </title>
 
+<% if @current_seller %>
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-
+<% else %>
+  <%= stylesheet_link_tag    'frontend', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'frontend', 'data-turbolinks-track' => true %>
+<% end %>
   <%= csrf_meta_tags %>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 

@@ -1,0 +1,80 @@
+<div class="container-fluid">
+  <div class="content-wrapper">
+<!-- page content -->
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Shopping Cart</h3>
+      </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+<% if @cart_quantity == 0 %>
+Your shopping cart is empty.
+<% else %>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10 col-md-offset-1">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th class="text-center">Price</th>
+                        <th class="text-center">Total</th>
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                <% @cart.cart_products.each do |item| 
+				product = Product.find(item.product_id)
+				%>
+                    <tr>
+                        <td class="col-sm-8 col-md-6">
+                        <div class="media">
+                            <a class="thumbnail pull-left" href="#"> <%= image_tag(product.images[0].thumb.url) %> </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><%= link_to product.title, product_detail_url(product) %></h4>
+                                <h5 class="media-heading"> by <a href="#"><%= product.seller.seller_name %></a></h5>
+                            </div>
+                        </div></td>
+                        <td class="col-sm-1 col-md-1" style="text-align: center">
+                        <input type="email" class="form-control" name="quantity" value="<%= item.quantity %>">
+                        </td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong><%= humanized_money_with_symbol product.price %></strong></td>
+                        <td class="col-sm-1 col-md-1 text-center"><strong><%= humanized_money_with_symbol product.price * item.quantity %></strong></td>
+                        <td class="col-sm-1 col-md-1">
+                        <button type="submit" class="btn btn-danger" onclick="location.href='<%= cart_delete_url(product_id: product.id) %>'">
+                            <span class="glyphicon glyphicon-remove"></span> Remove
+                        </button></td>
+                    </tr>
+				<% end %>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>   </td>
+                        <td><h3>Total</h3></td>
+                        <td class="text-right"><h3><strong><%= humanized_money_with_symbol @cart_total %></strong></h3></td>
+                    </tr>
+                    <tr>
+                        <td>   </td>
+                        <td>   </td>
+                        <td>    </td>
+                        <td>
+                        <button type="button" class="btn btn-default">
+                            <span class="glyphicon glyphicon-shopping-cart"></span> Continue Shopping
+                        </button></td>
+                        <td>
+                        <button type="button" class="btn btn-success" onclick="location.href='<%= checkout_url %>'">
+                            Checkout <span class="glyphicon glyphicon-play"></span>
+                        </button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<% end %>
+
+
+

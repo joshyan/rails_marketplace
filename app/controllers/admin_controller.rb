@@ -8,7 +8,7 @@ class AdminController < ApplicationController
 
 	def login_form
 		if admin_logged_in?
-			redirect_to admin_dashboard_url
+			redirect_to admin_dashboard_path
 		end
 	end
 
@@ -16,7 +16,7 @@ class AdminController < ApplicationController
 	    admin = Admin.find_by(email: params[:admin][:email].downcase)
 	    if admin && admin.authenticate(params[:admin][:password])
 	      admin_log_in admin
-	      redirect_to admin_dashboard_url
+	      redirect_to admin_dashboard_path
 	    else
 	      flash.now[:error] = 'Invalid email/password combination'
 	      render 'login_form'
@@ -31,7 +31,7 @@ class AdminController < ApplicationController
 		@admin = Admin.new(admin_params)
 		if @admin.save
 			admin_log_in @admin
-			redirect_to admin_dashboard_url
+			redirect_to admin_dashboard_path
 		else
 	      	render 'signup_form'
 	    end
@@ -39,7 +39,7 @@ class AdminController < ApplicationController
 
 	def logout
 		admin_log_out
-		redirect_to admin_login_url
+		redirect_to admin_login_path
 	end
 
 	def sellers
@@ -64,7 +64,7 @@ class AdminController < ApplicationController
 		@category = Category.new(category_params)
 		if @category.save
 			flash[:notice] = 'New category was successfully added!'
-			redirect_to admin_categories_url
+			redirect_to admin_categories_path
 		else
 	      	render 'add_category'
 	    end
@@ -77,7 +77,7 @@ class AdminController < ApplicationController
 	def update_category
 		if @category.update_attributes(category_params)
 			flash[:notice] = 'Category was successfully updated!'
-			redirect_to admin_categories_url
+			redirect_to admin_categories_path
 		else
 	      	render 'update_category'
 	    end	
@@ -85,7 +85,7 @@ class AdminController < ApplicationController
 
 	def delete_category
 		@category.destroy
-		redirect_to admin_categories_url	
+		redirect_to admin_categories_path	
 	end
 
 	def products
@@ -98,12 +98,20 @@ class AdminController < ApplicationController
 		@products = category.products
 	end
 
+	def settings_form
+
+	end
+
+	def settings
+		@current_admin.update_attributes(admin_params)
+		redirect_to admin_dashboard_path
+	end
 
 	  private
 
 		def admin_params
 		  params.require(:admin).permit(:name, :email, :password,
-		                               :password_confirmation)
+		                               :password_confirmation, :stripe_publishable_key, :stripe_secret_key)
 		end
 
 		def category_params
@@ -123,7 +131,7 @@ class AdminController < ApplicationController
 		def require_login
 		    unless admin_logged_in?
 		      flash[:error] = "You must be logged in to access this section"
-		      redirect_to admin_login_url # halts request cycle
+		      redirect_to admin_login_path # halts request cycle
 		    end
 		end
 end

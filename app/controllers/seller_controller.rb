@@ -8,7 +8,7 @@ class SellerController < ApplicationController
 
 	def login_form
 		if seller_logged_in?
-			redirect_to seller_dashboard_url
+			redirect_to seller_dashboard_path
 		end
 	end
 
@@ -16,7 +16,7 @@ class SellerController < ApplicationController
 	    seller = Seller.find_by(email: params[:seller][:email].downcase)
 	    if seller && seller.authenticate(params[:seller][:password])
 	      seller_log_in seller
-	      redirect_to seller_dashboard_url
+	      redirect_to seller_dashboard_path
 	    else
 	      flash[:error] = 'Invalid email/password combination'
 	      render 'login_form'
@@ -31,7 +31,7 @@ class SellerController < ApplicationController
 		@seller = Seller.new(seller_params)
 		if @seller.save
 			seller_log_in @seller
-			redirect_to seller_dashboard_url
+			redirect_to seller_dashboard_path
 		else
 	      	render 'signup_form'
 	    end
@@ -39,7 +39,7 @@ class SellerController < ApplicationController
 
 	def logout
 		seller_log_out
-		redirect_to seller_login_url
+		redirect_to seller_login_path
 	end
 
 	def dashboard
@@ -59,7 +59,7 @@ class SellerController < ApplicationController
 		@product.seller = @current_seller
 		if @product.save
 			flash[:notice] = 'New product was successfully added!'
-			redirect_to seller_products_url
+			redirect_to seller_products_path
 		else
 	      	render 'add_product'
 	    end
@@ -72,7 +72,7 @@ class SellerController < ApplicationController
 	def update_product
 		if @product.update_attributes(product_params)
 			flash[:notice] = 'Product was successfully updated!'
-			redirect_to seller_products_url
+			redirect_to seller_products_path
 		else
 	      	render 'update_product'
 	    end		
@@ -80,7 +80,7 @@ class SellerController < ApplicationController
 
 	def delete_product
 		@product.destroy
-		redirect_to seller_products_url
+		redirect_to seller_products_path
 	end
 
 	def add_bulk_products
@@ -89,6 +89,15 @@ class SellerController < ApplicationController
 
 	def orders
 		
+	end
+
+	def settings_form
+
+	end
+
+	def settings
+		@current_seller.update_attributes(seller_params)
+		redirect_to seller_dashboard_path
 	end
 
 	  private
@@ -106,7 +115,7 @@ class SellerController < ApplicationController
 		def require_login
 		    unless seller_logged_in?
 		      flash[:error] = "You must be logged in to access this section"
-		      redirect_to seller_login_url # halts request cycle
+		      redirect_to seller_login_path # halts request cycle
 		    end
 		end
 

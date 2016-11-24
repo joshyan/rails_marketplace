@@ -1,0 +1,187 @@
+<div class="container-fluid">
+  <div class="content-wrapper">
+<!-- page content -->
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Checkout</h3>
+      </div>
+
+    </div>
+    <div class="clearfix"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-10 col-md-offset-1">
+            <article>
+              <% if flash[:error].present? %>
+                <div id="error_explanation">
+                  <p><%= flash[:error] %></p>
+                </div>
+              <% end %>
+              <label class="amount">
+                <span>Amount: <%= humanized_money_with_symbol @total %></span>
+              </label>
+            </article>
+
+<form action="<%=charge_path%>" method="POST" id="payment-form">
+  <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+   <div class="form-row">
+    <label>
+      <span>Email Address</span>
+      <input type="email" name="email">
+    </label>
+  </div> 
+
+  <h3>Shipping Info</h3>
+   <div class="form-row">
+    <label>
+      <span>Full Name:</span>
+      <input type="text" name="fullname">
+    </label>
+  </div> 
+
+   <div class="form-row">
+    <label>
+      <span>Address line 1:</span>
+      <input type="text" name="address1">
+    </label>
+  </div> 
+
+     <div class="form-row">
+    <label>
+      <span>Address line 2:</span>
+      <input type="text" name="address2">
+    </label>
+  </div> 
+
+     <div class="form-row">
+    <label>
+      <span>City:</span>
+      <input type="text" name="city">
+    </label>
+  </div> 
+
+     <div class="form-row">
+    <label>
+      <span>State/Province/Region:</span>
+      <input type="text" name="state">
+    </label>
+  </div> 
+     
+     <div class="form-row">
+    <label>
+      <span>ZIP:</span>
+      <input type="text" name="zip">
+    </label>
+  </div> 
+
+     <div class="form-row">
+    <label>
+      <span>Country:</span>
+      <input type="text" name="country">
+    </label>
+  </div> 
+
+     <div class="form-row">
+    <label>
+      <span>Phone number:</span>
+      <input type="text" name="phone">
+    </label>
+  </div> 
+
+    <h3>Shipping Method</h3>
+   <div class="form-row">
+    <label>
+      <input type="radio" name="shipping_method[]" value="store_pickup"><span> Store Pickup</span>
+      <input type="radio" name="shipping_method[]" value="standard_shipping"><span> Free Standard Shipping</span>
+      <input type="radio" name="shipping_method[]" value="expediate_shipping"><span> $5 Expediate Shipping</span>
+    </label>
+  </div> 
+
+
+  
+
+  <h3>Payment Info</h3>
+
+  <span class="payment-errors"></span>
+
+  <div class="form-row">
+    <label>
+      <span>Card Number</span>
+      <input type="text" size="20" data-stripe="number">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Expiration (MM/YY)</span>
+      <input type="text" size="2" data-stripe="exp_month">
+    </label>
+    <span> / </span>
+    <input type="text" size="2" data-stripe="exp_year">
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>CVC</span>
+      <input type="text" size="4" data-stripe="cvc">
+    </label>
+  </div>
+
+  <div class="form-row">
+    <label>
+      <span>Billing Zip</span>
+      <input type="text" size="6" data-stripe="address_zip">
+    </label>
+  </div>
+
+  <input type="submit" class="submit" value="Submit">
+</form>
+
+        <script type="text/javascript">
+        $(function() {
+          var $form = $('#payment-form');
+          $form.submit(function(event) {
+            // Disable the submit button to prevent repeated clicks:
+            $form.find('.submit').prop('disabled', true);
+
+            // Request a token from Stripe:
+            Stripe.card.createToken($form, stripeResponseHandler);
+
+            // Prevent the form from being submitted:
+            return false;
+          });
+        });
+
+        function stripeResponseHandler(status, response) {
+          // Grab the form:
+          var $form = $('#payment-form');
+
+          if (response.error) { // Problem!
+
+            // Show the errors on the form:
+            $form.find('.payment-errors').text(response.error.message);
+            $form.find('.submit').prop('disabled', false); // Re-enable submission
+
+          } else { // Token was created!
+
+            // Get the token ID:
+            var token = response.id;
+
+            // Insert the token ID into the form so it gets submitted to the server:
+            $form.append($('<input type="hidden" name="stripeToken">').val(token));
+
+            // Submit the form:
+            $form.get(0).submit();
+          }
+        };
+        </script>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
